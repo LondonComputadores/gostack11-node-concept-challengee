@@ -12,18 +12,29 @@ app.use(express.json());
 app.use(cors());
 var repositories = [];
 app.get("/repositories", function (request, response) {
-  var title = request.query.title;
-  var results = title ? repositories.filter(function (project) {
-    return project.title.includes(title);
-  }) : repositories;
-  return response.json(results);
+  return response.json(repositories);
 });
-app.put("/repositories/:id", function (request, response) {
-  var id = request.params.id;
+app.post("/repositories", function (request, response) {
   var _request$body = request.body,
       title = _request$body.title,
       url = _request$body.url,
       techs = _request$body.techs;
+  var repository = {
+    id: uuid(),
+    title: title,
+    url: url,
+    techs: techs,
+    likes: 0
+  };
+  repositories.push(repository);
+  return response.json(repository);
+});
+app.put("/repositories/:id", function (request, response) {
+  var id = request.params.id;
+  var _request$body2 = request.body,
+      title = _request$body2.title,
+      url = _request$body2.url,
+      techs = _request$body2.techs;
   var repositoryIndex = repositories.findIndex(function (repository) {
     return repository.id === id;
   });
@@ -55,3 +66,4 @@ app["delete"]("/repositories/:id", function (request, response) {
   repositories.splice(repositoryIndex, 1);
   return response.status(204).send();
 });
+module.exports = app;
