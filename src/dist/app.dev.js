@@ -54,7 +54,7 @@ app.put("/repositories/:id", function (request, response) {
     return repository.id === id;
   });
 
-  if (repository < 0) {
+  if (repositoryIndex < 0) {
     return response.status(400).json({
       error: 'Repository Not Found!'
     });
@@ -66,9 +66,7 @@ app.put("/repositories/:id", function (request, response) {
     techs: techs
   };
   repositories[repositoryIndex] = repository;
-  return response.json({
-    repository: repository
-  });
+  return response.json(repository);
 });
 app["delete"]("/repositories/:id", function (request, response) {
   var id = request.params.id;
